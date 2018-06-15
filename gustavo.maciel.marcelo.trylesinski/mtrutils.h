@@ -1,5 +1,5 @@
-#ifndef MTRUTIL_H
-#define MTRUTIL_H
+#ifndef MTRUTILS_H_
+#define MTRUTILS_H_
 
 #include <cstdint>
 
