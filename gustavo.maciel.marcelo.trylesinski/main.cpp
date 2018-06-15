@@ -5,7 +5,10 @@
 #include <cstdio>
 #include <cstdlib>
 
+/* Número de argumentos na linha de comando. */
 static const int arg_num = 1;
+
+/* Dimensões das matrizes. */
 static const int matrices_dim = 3;
 
 static char doc[] =
@@ -16,8 +19,9 @@ static char args_doc[] = "MATRICES_FILE";
 
 static struct argp_option options[] = 
 {
-    {0,               0,  0, 0,                            "ARGS:"},
-    {"MATRICES_FILE", 0,  0, OPTION_DOC | OPTION_NO_USAGE, "Path to the matrices file"},
+    {0,               0,  0, 0,               "ARGS:"},
+    {"MATRICES_FILE", 0,  0, OPTION_DOC |
+                             OPTION_NO_USAGE, "Path to the matrices file"},
     {0}
 };
 
@@ -52,20 +56,21 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 
 static struct argp argp = { options, parse_opt, args_doc, doc };
 
-void print_matrix(matrix mtr, int n)
+/* Mostra a matriz mtr nxn em stdout. */
+static void print_matrix(matrix mtr, int n)
 {
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
-        {
             printf("%d ", mtr[i * n + j]);
-        }
 
         printf("\n");
     }
 }
 
-matrix *read_matrices(int *matrices_num, FILE *file)
+/* Lê o arquivo de matrizes apontado por file, armazena o número de matrizes
+ * do arquivo em matrices_num e devolve um vetor com as matrizes lidas. */
+static matrix *read_matrices(int *matrices_num, FILE *file)
 {
     matrix *matrices;
     char temp[3];
@@ -110,6 +115,7 @@ int main(int argc, char **argv)
     }
 
     matrices = read_matrices(&matrices_num, matrices_file);
+    fclose(matrices_file);
 
     for (int i = 0; i < matrices_num; i++)
         mtrfree(matrices[i]);
