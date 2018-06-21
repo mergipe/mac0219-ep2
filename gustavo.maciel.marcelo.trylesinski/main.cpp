@@ -1,14 +1,14 @@
 #include "mtrutils.h"
+#include "reduce.cuh"
 
 #include <argp.h>
-#include <cinttypes>
 #include <cstdio>
 #include <cstdlib>
 
-/* Número de argumentos na linha de comando. */
+// Número de argumentos na linha de comando.
 static const int arg_num = 1;
 
-/* Dimensões das matrizes. */
+// Dimensões das matrizes.
 static const int matrices_dim = 3;
 
 static char doc[] =
@@ -56,53 +56,11 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 
 static struct argp argp = { options, parse_opt, args_doc, doc };
 
-/* Mostra a matriz mtr nxn em stdout. */
-static void print_matrix(matrix mtr, int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-            printf("%d ", mtr[i * n + j]);
-
-        printf("\n");
-    }
-}
-
-/* Lê o arquivo de matrizes apontado por file, armazena o número de matrizes
- * do arquivo em matrices_num e devolve um vetor com as matrizes lidas. */
-static matrix *read_matrices(int *matrices_num, FILE *file)
-{
-    matrix *matrices;
-    char temp[3];
-
-    fscanf(file, "%d", matrices_num);
-    matrices = (matrix *) malloc(*matrices_num * sizeof (matrix));
-
-    for (int n = 0; n < *matrices_num; n++)
-    {
-        matrices[n] = mtralloc(matrices_dim);
-
-        if (matrices[n] == NULL)
-        {
-            perror("Erro: ");
-            exit(EXIT_FAILURE);
-        }
-
-        fscanf(file, "%s", temp);
-
-        for (int i = 0; i < matrices_dim; i++)
-            for (int j = 0; j < matrices_dim; j++)
-                fscanf(file, "%" SCNd32, &matrices[n][i * matrices_dim + j]);
-    }
-
-    return matrices;
-}
-
 int main(int argc, char **argv)
 {
     struct arguments args;
     FILE *matrices_file;
-    matrix *matrices;
+    matrix *matrices, result;
     int matrices_num;
 
     argp_parse(&argp, argc, argv, 0, 0, &args);
@@ -114,12 +72,16 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    matrices = read_matrices(&matrices_num, matrices_file);
+    matrices = read_matrices(&matrices_num, matrices_dim, matrices_file);
     fclose(matrices_file);
+    result = mtralloc(matrices_dim);
+    cuda_reduce(matrices, result, matrices_dim);
+    print_matrix(result, matrices_dim);
 
     for (int i = 0; i < matrices_num; i++)
         mtrfree(matrices[i]);
     free(matrices);
+    mtrfree(result);
 
     return EXIT_SUCCESS;
 }
