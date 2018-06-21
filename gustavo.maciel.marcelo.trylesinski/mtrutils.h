@@ -20,4 +20,11 @@ void print_matrix(matrix mtr, int n);
 // do arquivo em matrices_num e devolve um vetor com as matrizes lidas.
 matrix *read_matrices(int *matrices_num, int matrices_dim, FILE *file);
 
+// Devolve uma matriz nxn aleatória, com elementos entre 1 e 100.
+void mtrrand(matrix mtr, int n);
+
+// Recebe duas matrizes nxn, A e B. Devolve true se A = B, e false caso
+// contrário.
+bool mtreq(matrix A, matrix B, int n);
+
 #endif

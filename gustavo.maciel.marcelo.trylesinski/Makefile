@@ -18,6 +18,9 @@ mtrutils.o : mtrutils.h
 reduce.o : reduce.cu reduce.cuh mtrutils.h
 	$(NVCC) $(CUDAFLAGS) -c $<
 
+.PHONY : all
+all : main test
+
 .PHONY : clean
 clean :
 	-rm -f main test $(objects) $(tobjects)

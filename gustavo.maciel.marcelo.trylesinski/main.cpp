@@ -75,11 +75,12 @@ int main(int argc, char **argv)
     matrices = read_matrices(&matrices_num, matrices_dim, matrices_file);
     fclose(matrices_file);
     result = mtralloc(matrices_dim);
-    cuda_reduce(matrices, result, matrices_dim);
+    cuda_reduce(matrices, matrices_num, result, matrices_dim);
     print_matrix(result, matrices_dim);
 
     for (int i = 0; i < matrices_num; i++)
         mtrfree(matrices[i]);
+
     free(matrices);
     mtrfree(result);
 
