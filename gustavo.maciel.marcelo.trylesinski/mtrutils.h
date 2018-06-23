@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <cstdint>
 
-// Tipo matrix.
+// Tipos matrix e vector.
 typedef int32_t *matrix;
 
 // Aloca e devolve uma matriz nxn vazia.

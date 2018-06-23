@@ -26,6 +26,7 @@ int main(int argc, char **argv)
     result_cuda = mtralloc(matrices_dim);
     sequential_reduce(matrices, matrices_num, result_seq, matrices_dim);
     cuda_reduce(matrices, matrices_num, result_cuda, matrices_dim);
+
     printf("SEQUENTIAL REDUCE:\n");
     print_matrix(result_seq, matrices_dim);
     printf("\n");

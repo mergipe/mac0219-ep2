@@ -64,11 +64,9 @@ matrix *read_matrices(int *matrices_num, int matrices_dim, FILE *file)
 
 void mtrrand(matrix mtr, int n)
 {
-    srand(time(NULL));
-
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            mtr[i * n + j] = rand() % 100 + 1;
+            mtr[i * n + j] = (int) (drand48() * 100);
 }
 
 bool mtreq(matrix A, matrix B, int n)

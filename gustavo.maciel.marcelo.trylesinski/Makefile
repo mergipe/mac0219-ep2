@@ -2,7 +2,7 @@ NVCC	  = nvcc
 CXX       = g++
 CPPFLAGS  = -std=c++11 -Wall -pedantic -O3 -flto
 CUDAFLAGS = -arch sm_30 -Xptxas --opt-level=3
-LDFLAGS   = -L/usr/local/cuda/lib64 -lcudart
+LDFLAGS   = -L/usr/local/cuda/lib64 -lcuda -lcudart
 objects   = main.o mtrutils.o reduce.o
 tobjects  = test.o mtrutils.o reduce.o
 
